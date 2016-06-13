@@ -35,6 +35,8 @@
 #include <fcntl.h>
 #ifdef HAVE_GLOB_H
 # include <glob.h>
+#elif defined(__ANDROID__)
+# include "glob.h"
 #endif
 #include <sys/stat.h>
 #ifdef HAVE_UNISTD_H
@@ -609,10 +611,15 @@ TEST(DeathCheckNN, Simple) {
   ASSERT_DEATH(CHECK_NOTNULL(static_cast<void *>(NULL)), "");
 }
 
+#if defined(__ANDROID__)
+
+
+#endif // __ANDROID__
+
 // Get list of file names that match pattern
 static void GetFiles(const string& pattern, vector<string>* files) {
   files->clear();
-#if defined(HAVE_GLOB_H)
+#if defined(HAVE_GLOB_H) || defined(__ANDROID__)
   glob_t g;
   const int r = glob(pattern.c_str(), 0, NULL, &g);
   CHECK((r == 0) || (r == GLOB_NOMATCH)) << ": error matching " << pattern;

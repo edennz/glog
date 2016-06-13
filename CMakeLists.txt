@@ -460,6 +460,13 @@ add_executable (logging_unittest
 
 target_link_libraries (logging_unittest PRIVATE glog)
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Android")
+  add_library (glob
+    src/glob.c
+  )
+  target_link_libraries (logging_unittest PRIVATE glob)
+endif (${CMAKE_SYSTEM_NAME} MATCHES "Android")
+
 add_executable (stl_logging_unittest
   src/stl_logging_unittest.cc
 )
